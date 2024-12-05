@@ -20,3 +20,4 @@ document.getElementById('analyzeButton').addEventListener('click', function() {
     document.getElementById('styleFeatures').textContent = `Существительные: ${nouns.join(', ')}`;
     document.getElementById('stylisticDevices').textContent = `Глаголы: ${verbs.join(', ')}`;
 });
+
