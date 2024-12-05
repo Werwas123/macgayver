@@ -1,12 +1,12 @@
-// app.js
 document.getElementById('fileInput').addEventListener('change', function(event) {
     const file = event.target.files[0];
     if (file && file.type === 'application/pdf') {
+        console.log('Файл загружен:', file.name);
         const fileReader = new FileReader();
         fileReader.onload = function() {
             const typedarray = new Uint8Array(this.result);
-
             pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+                console.log('PDF загружен, количество страниц:', pdf.numPages);
                 let textOutput = '';
                 const numPages = pdf.numPages;
 
@@ -22,6 +22,7 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
                 }
 
                 Promise.all(promises).then(function() {
+                    console.log('Текст извлечен:', textOutput);
                     document.getElementById('textOutput').textContent = textOutput;
                     performTextAnalytics(textOutput);
                 });
@@ -32,8 +33,3 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
         alert('Please upload a valid PDF file.');
     }
 });
-
-function performTextAnalytics(text) {
-    const wordCount = text.split(/\s+/).filter(word => word.length > 0).length;
-    document.getElementById('analyticsOutput').textContent = `Word Count: ${wordCount}`;
-}
