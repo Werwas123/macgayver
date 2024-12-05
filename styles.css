@@ -22,7 +22,7 @@ input[type="file"] {
     margin: 20px 0;
 }
 
-#textOutput {
+#textOutput, #analyticsOutput {
     margin-top: 20px;
     text-align: left;
     max-height: 300px;
