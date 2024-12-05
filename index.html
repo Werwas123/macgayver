@@ -1,21 +1,33 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Editor</title>
+    <title>Стилистический Анализ Текста</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div id="app">
-        <h1>Text Editor</h1>
-        <div class="controls">
-            <button id="clearBtn">Clear</button>
-            <button id="copyBtn">Copy</button>
+        <h1>Стилистический Анализ Текста</h1>
+        <textarea id="textInput" placeholder="Введите текст для анализа..."></textarea>
+        <button id="analyzeButton">Анализировать</button>
+        <div id="results">
+            <h2>Результаты анализа</h2>
+            <ul>
+                <li><strong>Стиль и жанр:</strong> <span id="styleGenre"></span></li>
+                <li><strong>Тема:</strong> <span id="theme"></span></li>
+                <li><strong>Идея:</strong> <span id="idea"></span></li>
+                <li><strong>Ситуация использования:</strong> <span id="usageSituation"></span></li>
+                <li><strong>Цель текста:</strong> <span id="purpose"></span></li>
+                <li><strong>Форма речи:</strong> <span id="speechForm"></span></li>
+                <li><strong>Тип речи:</strong> <span id="speechType"></span></li>
+                <li><strong>Вид речи:</strong> <span id="speechKind"></span></li>
+                <li><strong>Стилевые черты:</strong> <span id="styleFeatures"></span></li>
+                <li><strong>Стилистические языковые средства:</strong> <span id="stylisticDevices"></span></li>
+            </ul>
         </div>
-        <textarea id="editor" placeholder="Type your text here..."></textarea>
-        <div id="output"></div>
     </div>
-    <script src="app.js"></script>
+    <script src="script.js"></script>
 </body>
 </html>
+
