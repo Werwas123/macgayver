@@ -17,7 +17,7 @@ function analyzeText() {
 
 function analyzeSentiment(text) {
     // Mock sentiment analysis
-    return text.includes('good') ? 'Positive' : 'Neutral';
+    return text.includes('хорошо') ? 'Позитивный' : 'Нейтральный';
 }
 
 function extractKeywords(text) {
@@ -30,7 +30,7 @@ function analyzeStyle(text) {
     toxicity.load(0.9).then(model => {
         model.classify(text).then(predictions => {
             const toxic = predictions.some(prediction => prediction.results[0].match);
-            document.getElementById('style').innerText = `Style: ${toxic ? 'Toxic' : 'Non-toxic'}`;
+            document.getElementById('style').innerText = `Style: ${toxic ? 'Токсичный' : 'Нетоксичный'}`;
         });
     });
 }
