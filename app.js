@@ -1,23 +1,36 @@
-document.getElementById('analyzeButton').addEventListener('click', function() {
+document.getElementById('analyzeButton').addEventListener('click', analyzeText);
+
+function analyzeText() {
     const text = document.getElementById('textInput').value;
 
-    // Используем библиотеку compromise для анализа текста
-    const doc = nlp(text);
+    // Example of sentiment analysis using a mock function
+    const sentiment = analyzeSentiment(text);
+    document.getElementById('sentiment').innerText = `Sentiment: ${sentiment}`;
 
-    // Пример анализа: определение частей речи
-    const nouns = doc.nouns().out('array');
-    const verbs = doc.verbs().out('array');
+    // Example of keyword extraction using a mock function
+    const keywords = extractKeywords(text);
+    document.getElementById('keywords').innerText = `Keywords: ${keywords.join(', ')}`;
 
-    // Заполнение результатов анализа
-    document.getElementById('styleGenre').textContent = 'Научный'; // Это пример, замените на реальный анализ
-    document.getElementById('theme').textContent = 'Технологии'; // Это пример, замените на реальный анализ
-    document.getElementById('idea').textContent = 'Влияние технологий на общество'; // Это пример, замените на реальный анализ
-    document.getElementById('usageSituation').textContent = 'Академическая статья'; // Это пример, замените на реальный анализ
-    document.getElementById('purpose').textContent = 'Информирование'; // Это пример, замените на реальный анализ
-    document.getElementById('speechForm').textContent = 'Письменная'; // Это пример, замените на реальный анализ
-    document.getElementById('speechType').textContent = 'Рассуждение'; // Это пример, замените на реальный анализ
-    document.getElementById('speechKind').textContent = 'Монолог'; // Это пример, замените на реальный анализ
-    document.getElementById('styleFeatures').textContent = `Существительные: ${nouns.join(', ')}`;
-    document.getElementById('stylisticDevices').textContent = `Глаголы: ${verbs.join(', ')}`;
-});
+    // Example of stylistic analysis using TensorFlow.js
+    analyzeStyle(text);
+}
 
+function analyzeSentiment(text) {
+    // Mock sentiment analysis
+    return text.includes('good') ? 'Positive' : 'Neutral';
+}
+
+function extractKeywords(text) {
+    // Mock keyword extraction
+    return text.split(' ').slice(0, 5);
+}
+
+function analyzeStyle(text) {
+    // Load the toxicity model
+    toxicity.load(0.9).then(model => {
+        model.classify(text).then(predictions => {
+            const toxic = predictions.some(prediction => prediction.results[0].match);
+            document.getElementById('style').innerText = `Style: ${toxic ? 'Toxic' : 'Non-toxic'}`;
+        });
+    });
+}
