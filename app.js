@@ -1,48 +1,29 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const facts = [
-        {
-            title: "Возраст",
-            description: "Земле примерно 4,54 миллиарда лет. Это было определено с помощью радиометрического датирования самых старых земных и лунных пород, а также метеоритов."
-        },
-        {
-            title: "Вода",
-            description: "Около 71% поверхности Земли покрыто водой, и океаны содержат около 96,5% всей воды на планете."
-        },
-        {
-            title: "Атмосфера",
-            description: "Земная атмосфера состоит из 78% азота, 21% кислорода и 1% других газов, включая аргон, углекислый газ и неон."
-        },
-        {
-            title: "Гравитация",
-            description: "Земля не является идеальной сферой. Из-за вращения она слегка сплюснута у полюсов и расширена на экваторе, что делает её форму геоидом."
-        },
-        {
-            title: "Магнитное поле",
-            description: "Земля имеет мощное магнитное поле, которое защищает её от солнечного ветра и космической радиации. Это магнитное поле создается движением жидкого железа в её внешнем ядре."
-        },
-        {
-            title: "Тектоника плит",
-            description: "Земля — единственная известная планета с тектоникой плит. Эта активность ответственна за формирование гор, землетрясения и вулканическую активность."
-        },
-        {
-            title: "Луна",
-            description: "Луна — единственный естественный спутник Земли. Она оказывает значительное влияние на приливы и отливы океанов."
-        },
-        {
-            title: "Биосфера",
-            description: "Земля — единственная известная планета, на которой существует жизнь. Биосфера Земли включает миллионы видов, от микроскопических бактерий до гигантских китов."
-        },
-        {
-            title: "Форма Земли",
-            description: "Некоторые люди считают, что Земля плоская, однако научный консенсус подтверждает, что Земля имеет форму геоида."
-        }
-    ];
+// app.js
+document.getElementById('fileInput').addEventListener('change', function(event) {
+    const file = event.target.files[0];
+    if (file && file.type === 'application/pdf') {
+        const fileReader = new FileReader();
+        fileReader.onload = function() {
+            const typedarray = new Uint8Array(this.result);
 
-    const factsList = document.getElementById('facts-list');
+            pdfjsLib.getDocument(typedarray).promise.then(function(pdf) {
+                let textOutput = '';
+                const numPages = pdf.numPages;
 
-    facts.forEach(fact => {
-        const listItem = document.createElement('li');
-        listItem.innerHTML = `<strong>${fact.title}:</strong> ${fact.description}`;
-        factsList.appendChild(listItem);
-    });
+                for (let pageNum = 1; pageNum <= numPages; pageNum++) {
+                    pdf.getPage(pageNum).then(function(page) {
+                        page.getTextContent().then(function(textContent) {
+                            textContent.items.forEach(function(item) {
+                                textOutput += item.str + ' ';
+                            });
+                            document.getElementById('textOutput').textContent = textOutput;
+                        });
+                    });
+                }
+            });
+        };
+        fileReader.readAsArrayBuffer(file);
+    } else {
+        alert('Please upload a valid PDF file.');
+    }
 });
