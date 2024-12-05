@@ -1,18 +1,22 @@
 document.getElementById('analyzeButton').addEventListener('click', function() {
     const text = document.getElementById('textInput').value;
 
-    // Здесь вы можете добавить логику для анализа текста
-    // Например, использовать API или библиотеки для анализа текста
+    // Используем библиотеку compromise для анализа текста
+    const doc = nlp(text);
 
-    // Пример заполнения результатов анализа
-    document.getElementById('styleGenre').textContent = 'Научный';
-    document.getElementById('theme').textContent = 'Технологии';
-    document.getElementById('idea').textContent = 'Влияние технологий на общество';
-    document.getElementById('usageSituation').textContent = 'Академическая статья';
-    document.getElementById('purpose').textContent = 'Информирование';
-    document.getElementById('speechForm').textContent = 'Письменная';
-    document.getElementById('speechType').textContent = 'Рассуждение';
-    document.getElementById('speechKind').textContent = 'Монолог';
-    document.getElementById('styleFeatures').textContent = 'Логичность, точность';
-    document.getElementById('stylisticDevices').textContent = 'Метафоры, эпитеты';
+    // Пример анализа: определение частей речи
+    const nouns = doc.nouns().out('array');
+    const verbs = doc.verbs().out('array');
+
+    // Заполнение результатов анализа
+    document.getElementById('styleGenre').textContent = 'Научный'; // Это пример, замените на реальный анализ
+    document.getElementById('theme').textContent = 'Технологии'; // Это пример, замените на реальный анализ
+    document.getElementById('idea').textContent = 'Влияние технологий на общество'; // Это пример, замените на реальный анализ
+    document.getElementById('usageSituation').textContent = 'Академическая статья'; // Это пример, замените на реальный анализ
+    document.getElementById('purpose').textContent = 'Информирование'; // Это пример, замените на реальный анализ
+    document.getElementById('speechForm').textContent = 'Письменная'; // Это пример, замените на реальный анализ
+    document.getElementById('speechType').textContent = 'Рассуждение'; // Это пример, замените на реальный анализ
+    document.getElementById('speechKind').textContent = 'Монолог'; // Это пример, замените на реальный анализ
+    document.getElementById('styleFeatures').textContent = `Существительные: ${nouns.join(', ')}`;
+    document.getElementById('stylisticDevices').textContent = `Глаголы: ${verbs.join(', ')}`;
 });
