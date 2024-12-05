@@ -2,7 +2,7 @@ document.getElementById('analyzeButton').addEventListener('click', function() {
     const text = document.getElementById('textInput').value;
 
     // Используем библиотеку compromise для анализа текста
-    const doc = nlp(text);
+    const doc = nlp(text);ыы
 
     // Пример анализа: определение частей речи
     const nouns = doc.nouns().out('array');
