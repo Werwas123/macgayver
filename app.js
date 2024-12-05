@@ -1,87 +1,115 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const editor = document.getElementById('editor');
-    const output = document.getElementById('output');
-    const clearBtn = document.getElementById('clearBtn');
-    const copyBtn = document.getElementById('copyBtn');
+function determineSpeechType(text) {
+    const markers = {
+        narrative: {
+            words: ['затем', 'потом', 'после', 'сначала', 'вдруг', 'однажды', 'далее'],
+            patterns: /([а-яё]+л|[а-яё]+ла|[а-яё]+ли)\b/gi  // Глаголы прошедшего времени
+        },
+        descriptive: {
+            words: ['такой', 'словно', 'подобный', 'похожий', 'будто', 'как'],
+            patterns: /([а-яё]+ый|[а-яё]+ая|[а-яё]+ое|[а-яё]+ые)\b/gi  // Прилагательные
+        },
+        reasoning: {
+            words: ['потому что', 'поэтому', 'следовательно', 'итак', 'таким образом', 'во-первых', 'во-вторых'],
+            patterns: /\b(если|поскольку|так как)\b/gi  // Причинные союзы
+        }
+    };
 
-    function analyzeText(text) {
-        // Базовый анализ текста
-        const analysis = {
-            characters: text.length,
-            words: text.trim().split(/\s+/).length,
-            sentences: text.split(/[.!?]+/).length - 1,
-            paragraphs: text.split('\n\n').length,
-            // Анализ тона (простой пример)
-            tone: analyzeTone(text),
-            // Поиск повторяющихся слов
-            repeatedWords: findRepeatedWords(text),
-            // Синтаксический анализ
-            syntax: analyzeSyntax(text)
-        };
-        
-        return analysis;
-    }
+    const scores = {
+        narrative: 0,
+        descriptive: 0,
+        reasoning: 0
+    };
 
-    function analyzeTone(text) {
-        const positiveWords = ['хорошо', 'отлично', 'прекрасно', 'замечательно'];
-        const negativeWords = ['плохо', 'ужасно', 'отвратительно'];
-        
-        let positiveCount = 0;
-        let negativeCount = 0;
-        
-        const words = text.toLowerCase().split(/\s+/);
+    const lowerText = text.toLowerCase();
+
+    // Подсчет маркеров
+    Object.entries(markers).forEach(([type, {words, patterns}]) => {
+        // Проверка ключевых слов
         words.forEach(word => {
-            if (positiveWords.includes(word)) positiveCount++;
-            if (negativeWords.includes(word)) negativeCount++;
+            const regex = new RegExp(`\\b${word}\\b`, 'gi');
+            const matches = (lowerText.match(regex) || []).length;
+            scores[type] += matches;
         });
 
-        if (positiveCount > negativeCount) return 'позитивный';
-        if (negativeCount > positiveCount) return 'негативный';
-        return 'нейтральный';
-    }
-
-    function findRepeatedWords(text) {
-        const words = text.toLowerCase().match(/\b\w+\b/g) || [];
-        const wordCount = {};
-        const repeated = [];
-
-        words.forEach(word => {
-            wordCount[word] = (wordCount[word] || 0) + 1;
-            if (wordCount[word] === 2) repeated.push(word);
-        });
-
-        return repeated;
-    }
-
-    function analyzeSyntax(text) {
-        return {
-            exclamationMarks: (text.match(/!/g) || []).length,
-            questionMarks: (text.match(/\?/g) || []).length,
-            commas: (text.match(/,/g) || []).length,
-        };
-    }
-
-    editor.addEventListener('input', () => {
-        const text = editor.value;
-        const analysis = analyzeText(text);
-        
-        // Форматируем вывод анализа
-        output.innerHTML = `
-            <h3>Анализ текста:</h3>
-            <p>Символов: ${analysis.characters}</p>
-            <p>Слов: ${analysis.words}</p>
-            <p>Предложений: ${analysis.sentences}</p>
-            <p>Абзацев: ${analysis.paragraphs}</p>
-            <p>Тон текста: ${analysis.tone}</p>
-            <p>Повторяющиеся слова: ${analysis.repeatedWords.join(', ') || 'нет'}</p>
-            <p>Синтаксис:</p>
-            <ul>
-                <li>Восклицательных знаков: ${analysis.syntax.exclamationMarks}</li>
-                <li>Вопросительных знаков: ${analysis.syntax.questionMarks}</li>
-                <li>Запятых: ${analysis.syntax.commas}</li>
-            </ul>
-        `;
+        // Проверка паттернов
+        const patternMatches = (lowerText.match(patterns) || []).length;
+        scores[type] += patternMatches;
     });
 
-    // Остальной код остается без изменений...
-});
+    // Определение преобладающего типа речи
+    const dominantType = Object.entries(scores)
+        .sort((a, b) => b[1] - a[1])[0][0];
+
+    return {
+        type: dominantType,
+        details: {
+            isNarrative: scores.narrative > 0,
+            isDescriptive: scores.descriptive > 0,
+            isReasoning: scores.reasoning > 0,
+            markers: scores
+        }
+    };
+}
+
+function analyzeStylistics(text) {
+    const stylistics = {
+        tropes: findTropes(text),
+        lexical: findLexicalMeans(text),
+        syntactic: findSyntacticMeans(text),
+        figures: findStylisticFigures(text)
+    };
+
+    return stylistics;
+}
+
+function findTropes(text) {
+    const tropes = [];
+    const patterns = {
+        epithet: /([а-яё]+ый|[а-яё]+ая|[а-яё]+ое|[а-яё]+ые)\s+[а-яё]+/gi,
+        metaphor: /(словно|будто|как)\s+[а-яё]+/gi,
+        personification: /[а-яё]+ит|[а-яё]+ет\s+(солнце|ветер|дождь|природа)/gi
+    };
+
+    Object.entries(patterns).forEach(([type, pattern]) => {
+        if (text.match(pattern)) {
+            tropes.push(type);
+        }
+    });
+
+    return tropes;
+}
+
+function findLexicalMeans(text) {
+    const means = [];
+    const patterns = {
+        diminutive: /[а-яё]+(очк|ечк|оньк|еньк|ушк|юшк)[а-яё]+/gi,
+        professional: /(терминал|процесс|функция|система)/gi,
+        dialect: /(айда|давеча|намедни)/gi
+    };
+
+    Object.entries(patterns).forEach(([type, pattern]) => {
+        if (text.match(pattern)) {
+            means.push(type);
+        }
+    });
+
+    return means;
+}
+
+function findSyntacticMeans(text) {
+    const means = [];
+    const patterns = {
+        exclamation: /!+/g,
+        question: /\?+/g,
+        parallelism: /([а-яё]+,[^,]+){2,}/gi,
+        repetition: /\b([а-яё]+)\b[^а-яё]+\b\1\b/gi
+    };
+
+    Object.entries(patterns).forEach(([type, pattern]) => {
+        if (text.match(pattern)) {
+            means.push(type);
+        }
+    });
+
+    return means;
+}
