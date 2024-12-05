@@ -3,18 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Text Analyzer</title>
+    <title>Text Editor</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <h1>PDF Text Analyzer</h1>
-        <input type="file" id="pdfInput" accept=".pdf">
-        <button id="analyzeButton">Analyze Text</button>
+    <div id="app">
+        <textarea id="editor" placeholder="Type your text here..."></textarea>
         <div id="output"></div>
-        <div id="analyticsOutput"></div> <!-- Новое окно для результатов аналитики -->
     </div>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.10.377/pdf.min.js"></script>
-    <script src="script.js"></script>
+    <script src="app.js"></script>
 </body>
 </html>
